@@ -36,7 +36,30 @@ try {
     assert.match(page.headers['content-type'], /text\/html/);
     assert.match(page.text, /id="root"/);
     assert.ok(page.headers['content-security-policy']);
+    if (path === '/') {
+      assert.equal(page.headers['x-robots-tag'], undefined);
+      assert.match(page.text, /rel="canonical" href="https:\/\/lurelog\.example\.test\/"/);
+      assert.match(page.text, /property="og:image"/);
+      assert.equal((page.text.match(/<h1[ >]/g) ?? []).length, 1);
+      assert.match(page.text, /Organize your lures, record your catches/);
+      assert.match(page.text, /href="\/register"/);
+      assert.match(page.text, /"@type":"WebSite","name":"LureLog"/);
+    } else {
+      assert.equal(page.headers['x-robots-tag'], 'noindex, follow');
+      assert.match(page.text, /name="robots" content="noindex, follow"/);
+      assert.doesNotMatch(page.text, /prerendered-home|class="landing"/);
+    }
   }
+  const robots = await get('/robots.txt');
+  assert.equal(robots.status, 200);
+  assert.match(robots.headers['content-type'], /text\/plain/);
+  assert.match(robots.text, /Sitemap: https:\/\/lurelog\.example\.test\/sitemap.xml/);
+  const sitemap = await get('/sitemap.xml');
+  assert.equal(sitemap.status, 200);
+  assert.match(sitemap.headers['content-type'], /application\/xml/);
+  assert.match(sitemap.text, /<loc>https:\/\/lurelog\.example\.test\/<\/loc>/);
+  assert.equal((await get('/not-a-page')).status, 404);
+  assert.equal((await get('/index.html')).status, 301);
   const csrf = await get('/api/v1/csrf');
   const cookie = csrf.headers['set-cookie'][0];
   assert.match(cookie, /^__Host-lurelog-csrf=/);
@@ -65,12 +88,14 @@ try {
     (await get('/api/v1/auth/me').set('Cookie', sessionCookie.split(';')[0])).status,
     200,
   );
-  assert.equal((await get('/api/v1/lures')).status, 401);
+  const privateApi = await get('/api/v1/lures');
+  assert.equal(privateApi.status, 401);
+  assert.equal(privateApi.headers['x-robots-tag'], 'noindex, follow');
   assert.equal((await get('/api/not-real')).status, 404);
   await mongoose.disconnect();
   assert.equal((await get('/api/v1/health')).status, 503);
   console.log(
-    'Production smoke passed: built SPA routes, headers, secure cookies, registration/session, CSRF, private routes and database health. SMTP and cloud storage were not contacted.',
+    'Production smoke passed: built SPA routes, SEO metadata, robots/sitemap, noindex, 404s, headers, secure cookies, registration/session, CSRF, private routes and database health. SMTP and cloud storage were not contacted.',
   );
 } finally {
   await mongoose.disconnect();

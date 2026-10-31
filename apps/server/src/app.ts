@@ -14,6 +14,7 @@ import { lureRouter } from './routes/lures.js';
 import { catchRouter } from './routes/catches.js';
 import { uploadRouter, mediaRouter } from './routes/images.js';
 import { dashboardRouter } from './routes/dashboard.js';
+import { createWebsiteRouter } from './routes/website.js';
 import { send } from './utils/http.js';
 export const app = express();
 app.disable('x-powered-by');
@@ -32,6 +33,10 @@ app.use(
   express.json({ limit: '64kb' }),
   cookieParser(),
 );
+app.use(['/api', '/media'], (_req, res, next) => {
+  res.set('X-Robots-Tag', 'noindex, follow');
+  next();
+});
 app.use(
   '/api',
   rateLimit({
@@ -64,7 +69,6 @@ app.use('/media', mediaRouter);
 app.use('/api', (_req, _res, next) => next(new HttpError(404, 'Endpoint not found')));
 if (env.NODE_ENV === 'production') {
   const client = path.resolve(import.meta.dirname, '../../client/dist');
-  app.use(express.static(client));
-  app.get('/{*path}', (_req, res) => res.sendFile(path.join(client, 'index.html')));
+  app.use(createWebsiteRouter(client, env.CLIENT_ORIGIN));
 }
 app.use(errorHandler);
