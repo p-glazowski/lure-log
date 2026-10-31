@@ -60,7 +60,7 @@ export default function Layout() {
       </dialog>
       <div className="main-wrap">
         <header className="topbar">
-          <div className="breadcrumb">
+          <div className="topbar-start">
             <button
               className="mobile-menu icon-control"
               aria-label={t('Open navigation')}
@@ -70,9 +70,16 @@ export default function Layout() {
             >
               <Menu size={21} />
             </button>
-            <Link to="/dashboard">{t('Your fishing log')}</Link>
-            <ChevronRight size={14} />
-            <span>{t(section)}</span>
+            <Link className="logo mobile-wordmark" to="/dashboard" aria-label={t('LureLog home')}>
+              <span>
+                Lure<span className="logo-light">Log</span>
+              </span>
+            </Link>
+            <div className="breadcrumb">
+              <Link to="/dashboard">{t('Your fishing log')}</Link>
+              <ChevronRight size={14} />
+              <span>{t(section)}</span>
+            </div>
           </div>
           <div className="topbar-right">
             <Link className="topbar-log text-action" to="/catches/new">

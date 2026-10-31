@@ -488,6 +488,11 @@ form > label {
   justify-content: space-between;
   gap: 16px;
 }
+.topbar-start {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 .breadcrumb {
   display: flex;
   align-items: center;
@@ -567,6 +572,7 @@ form > label {
   font-size: 11px;
 }
 .mobile-menu,
+.mobile-wordmark,
 .bottom-nav {
   display: none;
 }
@@ -2586,6 +2592,16 @@ button.picker-option:hover {
   .mobile-menu {
     display: inline-flex;
   }
+  .mobile-wordmark {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 20px;
+    color: var(--primary);
+  }
+  .topbar .breadcrumb {
+    display: none;
+  }
   .topbar {
     min-height: 64px;
   }
@@ -2701,15 +2717,8 @@ button.picker-option:hover {
   .topbar {
     padding: 8px 16px;
   }
-  .breadcrumb {
+  .topbar-start {
     gap: 8px;
-    font-size: 11px;
-  }
-  .breadcrumb > a {
-    display: none;
-  }
-  .breadcrumb > svg {
-    display: none;
   }
   .topbar-right {
     gap: 12px;
