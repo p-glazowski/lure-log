@@ -70,17 +70,17 @@ export default function Layout() {
             >
               <Menu size={21} />
             </button>
-            <Link className="logo mobile-wordmark" to="/dashboard" aria-label={t('LureLog home')}>
-              <span>
-                Lure<span className="logo-light">Log</span>
-              </span>
-            </Link>
             <div className="breadcrumb">
               <Link to="/dashboard">{t('Your fishing log')}</Link>
               <ChevronRight size={14} />
               <span>{t(section)}</span>
             </div>
           </div>
+          <Link className="logo mobile-wordmark" to="/dashboard" aria-label={t('LureLog home')}>
+            <span>
+              Lure<span className="logo-light">Log</span>
+            </span>
+          </Link>
           <div className="topbar-right">
             <Link className="topbar-log text-action" to="/catches/new">
               <Plus size={16} />

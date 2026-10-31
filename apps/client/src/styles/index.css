@@ -2599,19 +2599,23 @@ button.picker-option:hover {
   .mobile-wordmark {
     display: inline-flex;
     align-items: center;
+    justify-self: center;
     min-height: 44px;
     font-size: 20px;
     color: var(--primary);
-  }
-  .mobile-wordmark > span {
-    /* Center Manrope's visible lettering with the menu strokes. */
-    transform: translateY(-3px);
   }
   .topbar .breadcrumb {
     display: none;
   }
   .topbar {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
     min-height: 64px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  .topbar-right {
+    justify-self: end;
   }
   .topbar-log {
     display: none;
