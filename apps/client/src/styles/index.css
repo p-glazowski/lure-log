@@ -514,6 +514,10 @@ form > label {
 }
 .profile-menu-trigger {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
 }
 .profile-menu-panel {
