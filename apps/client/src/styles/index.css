@@ -2603,6 +2603,10 @@ button.picker-option:hover {
     font-size: 20px;
     color: var(--primary);
   }
+  .mobile-wordmark > span {
+    /* Center Manrope's visible lettering with the menu strokes. */
+    transform: translateY(-3px);
+  }
   .topbar .breadcrumb {
     display: none;
   }
