@@ -28,18 +28,25 @@ export function createWebsiteRouter(clientDirectory: string, siteOrigin: string)
   const canonical = escapeMarkup(homepage);
   const image = escapeMarkup(new URL('/images/tackle-box-hero.webp', siteOrigin).href);
   const template = readFileSync(path.join(clientDirectory, 'index.html'), 'utf8');
+  const websiteSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'LureLog',
+    url: homepage,
+  }).replace(/</g, '\\u003c');
   const homepageHtml = template.replace(
     '</head>',
     `    <link rel="canonical" href="${canonical}" />
     <meta property="og:url" content="${canonical}" />
     <meta property="og:image" content="${image}" />
     <meta name="twitter:image" content="${image}" />
+    <script type="application/ld+json">${websiteSchema}</script>
   </head>`,
   );
-  const privateHtml = template.replace(
-    '</head>',
-    '    <meta name="robots" content="noindex, follow" />\n  </head>',
-  );
+  // Non-home routes start with an empty app root, never a flash of marketing content.
+  const privateHtml = template
+    .replace(/<!--prerendered-home-->[\s\S]*?<!--\/prerendered-home-->/, '')
+    .replace('</head>', '    <meta name="robots" content="noindex, follow" />\n  </head>');
 
   router.get('/robots.txt', (_req, res) => {
     // Keep app pages crawlable so search engines can read their noindex headers.

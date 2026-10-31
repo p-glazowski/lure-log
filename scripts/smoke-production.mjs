@@ -40,9 +40,14 @@ try {
       assert.equal(page.headers['x-robots-tag'], undefined);
       assert.match(page.text, /rel="canonical" href="https:\/\/lurelog\.example\.test\/"/);
       assert.match(page.text, /property="og:image"/);
+      assert.equal((page.text.match(/<h1[ >]/g) ?? []).length, 1);
+      assert.match(page.text, /Organize your lures, record your catches/);
+      assert.match(page.text, /href="\/register"/);
+      assert.match(page.text, /"@type":"WebSite","name":"LureLog"/);
     } else {
       assert.equal(page.headers['x-robots-tag'], 'noindex, follow');
       assert.match(page.text, /name="robots" content="noindex, follow"/);
+      assert.doesNotMatch(page.text, /prerendered-home|class="landing"/);
     }
   }
   const robots = await get('/robots.txt');

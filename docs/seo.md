@@ -8,7 +8,7 @@ The production Express server provides:
 
 - `/robots.txt`: allows crawling the site and its assets, excludes API/media crawling, and links to the sitemap.
 - `/sitemap.xml`: lists only the canonical homepage. No private record URLs or invented modification dates are included.
-- Homepage HTML: a descriptive title, description, canonical link, Open Graph metadata and a sharing image.
+- Homepage HTML: the public landing content, a descriptive title, description, canonical link, Open Graph metadata, a sharing image and `WebSite` JSON-LD identifying LureLog.
 - Other app pages: `X-Robots-Tag: noindex, follow` and an equivalent HTML meta tag. These pages are crawlable so search engines can read `noindex`.
 - Unknown page URLs: HTTP 404 with the app's not-found screen and `noindex`.
 - `/index.html`: a permanent redirect to `/`, avoiding a second homepage URL.
@@ -18,10 +18,14 @@ Set it to the intended public HTTPS origin for each deployment. The Vite develop
 not serve the production SEO routes. Preview deployments should be kept out of search through
 the hosting platform's indexing controls.
 
-The landing content still renders through React. Google must render its JavaScript to read the
-page content; canonical and sharing metadata are available in the initial response. English and
-Polish currently share one URL and use a local language preference, so there are no separate
-language URLs or `hreflang` entries.
+The client build prerenders the existing React landing components with a known signed-out
+session. This makes public headings, descriptions, image and sign-up links available before
+JavaScript runs, without fetching user data. The browser checks the real session and takes
+over with the normal app. Non-home responses remove the prerendered landing markup, so sign-in
+and workspace routes do not show marketing content before loading.
+
+English and Polish currently share one URL and use a local language preference. The initial
+public HTML is English; there are no separate language URLs or `hreflang` entries.
 
 After merging and deploying, check `/robots.txt`, `/sitemap.xml`, the homepage source and the
 `X-Robots-Tag` response on `/login`. Verify the domain in Google Search Console, submit
@@ -35,4 +39,5 @@ alongside authentication and production security behavior.
 References: [robots.txt](https://developers.google.com/search/docs/crawling-indexing/robots/intro),
 [noindex](https://developers.google.com/search/docs/crawling-indexing/block-indexing),
 [sitemaps](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap),
+[site names](https://developers.google.com/search/docs/appearance/site-names),
 [JavaScript SEO](https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics).

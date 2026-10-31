@@ -9,7 +9,10 @@ import { createWebsiteRouter } from './website.js';
 const directory = mkdtempSync(path.join(tmpdir(), 'lurelog-seo-'));
 writeFileSync(
   path.join(directory, 'index.html'),
-  readFileSync(new URL('../../../client/index.html', import.meta.url)),
+  readFileSync(new URL('../../../client/index.html', import.meta.url), 'utf8').replace(
+    '<div id="root"></div>',
+    '<div id="root"><!--prerendered-home--><h1>Public landing preview</h1><!--/prerendered-home--></div>',
+  ),
 );
 writeFileSync(path.join(directory, 'asset.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
 const app = express().use(createWebsiteRouter(directory, 'https://lurelog.example.test'));
@@ -48,6 +51,16 @@ it('serves canonical and sharing metadata in homepage HTML before JavaScript run
     'property="og:image" content="https://lurelog.example.test/images/tackle-box-hero.webp"',
   );
   expect(response.text).not.toMatch(/untrusted|utm_source/);
+  expect(response.text).toContain('<h1>Public landing preview</h1>');
+  const schema = JSON.parse(
+    response.text.match(/<script type="application\/ld\+json">(.*?)<\/script>/)![1],
+  );
+  expect(schema).toEqual({
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'LureLog',
+    url: 'https://lurelog.example.test/',
+  });
 });
 
 it.each([
@@ -72,7 +85,8 @@ it.each([
   expect(response.headers['x-robots-tag']).toBe('noindex, follow');
   expect(response.text).toContain('<meta name="robots" content="noindex, follow"');
   expect(response.text).toContain('id="root"');
-  expect(response.text).not.toMatch(/rel="canonical"|private-token/);
+  expect(response.text).not.toMatch(/rel="canonical"|private-token|Public landing preview/);
+  expect(response.text).not.toContain('application/ld+json');
 });
 
 it.each(['/missing-page', '/missing-file.png', '/lures/record/unknown'])(
