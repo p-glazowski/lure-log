@@ -60,7 +60,7 @@ export default function Layout() {
       </dialog>
       <div className="main-wrap">
         <header className="topbar">
-          <div className="breadcrumb">
+          <div className="topbar-start">
             <button
               className="mobile-menu icon-control"
               aria-label={t('Open navigation')}
@@ -68,12 +68,19 @@ export default function Layout() {
               aria-controls="workspace-navigation"
               onClick={() => setOpen(true)}
             >
-              <Menu size={21} />
+              <Menu size={24} />
             </button>
-            <Link to="/dashboard">{t('Your fishing log')}</Link>
-            <ChevronRight size={14} />
-            <span>{t(section)}</span>
+            <div className="breadcrumb">
+              <Link to="/dashboard">{t('Your fishing log')}</Link>
+              <ChevronRight size={14} />
+              <span>{t(section)}</span>
+            </div>
           </div>
+          <Link className="logo mobile-wordmark" to="/dashboard" aria-label={t('LureLog home')}>
+            <span>
+              Lure<span className="logo-light">Log</span>
+            </span>
+          </Link>
           <div className="topbar-right">
             <Link className="topbar-log text-action" to="/catches/new">
               <Plus size={16} />

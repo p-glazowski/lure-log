@@ -488,6 +488,11 @@ form > label {
   justify-content: space-between;
   gap: 16px;
 }
+.topbar-start {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 .breadcrumb {
   display: flex;
   align-items: center;
@@ -509,6 +514,10 @@ form > label {
 }
 .profile-menu-trigger {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
 }
 .profile-menu-panel {
@@ -567,6 +576,7 @@ form > label {
   font-size: 11px;
 }
 .mobile-menu,
+.mobile-wordmark,
 .bottom-nav {
   display: none;
 }
@@ -2586,8 +2596,30 @@ button.picker-option:hover {
   .mobile-menu {
     display: inline-flex;
   }
+  .mobile-menu > svg {
+    /* Align the strokes with the wordmark's visible lettering. */
+    transform: translateY(2px);
+  }
+  .mobile-wordmark {
+    display: inline-flex;
+    align-items: center;
+    justify-self: center;
+    min-height: 44px;
+    font-size: 20px;
+    color: var(--primary);
+  }
+  .topbar .breadcrumb {
+    display: none;
+  }
   .topbar {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
     min-height: 64px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  .topbar-right {
+    justify-self: end;
   }
   .topbar-log {
     display: none;
@@ -2701,15 +2733,8 @@ button.picker-option:hover {
   .topbar {
     padding: 8px 16px;
   }
-  .breadcrumb {
+  .topbar-start {
     gap: 8px;
-    font-size: 11px;
-  }
-  .breadcrumb > a {
-    display: none;
-  }
-  .breadcrumb > svg {
-    display: none;
   }
   .topbar-right {
     gap: 12px;
