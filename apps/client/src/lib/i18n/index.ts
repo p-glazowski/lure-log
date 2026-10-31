@@ -42,8 +42,8 @@ export function setLanguage(next: Language) {
   document.documentElement.lang = next;
   document.title =
     next === 'pl'
-      ? 'LureLog — Każda przynęta ma swoją historię'
-      : 'LureLog — Every lure has a story';
+      ? 'Dziennik wędkarski i kolekcja przynęt | LureLog'
+      : 'Fishing Journal & Lure Collection | LureLog';
   listeners.forEach((listener) => listener());
 }
 export function initializeLanguage() {
