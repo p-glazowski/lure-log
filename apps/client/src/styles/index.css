@@ -4135,9 +4135,6 @@ button.picker-option:hover {
   }
   .record-actions {
     order: 4;
-    position: sticky;
-    bottom: calc(76px + env(safe-area-inset-bottom));
-    z-index: 20;
     margin: 0;
     padding: 12px;
     background: var(--surface);
@@ -4172,7 +4169,7 @@ button.picker-option:hover {
 }
 @media (max-width: 1023px) {
   .record-form :is(input, textarea, select, summary) {
-    scroll-margin-block: 100px 220px;
+    scroll-margin-block: 100px;
   }
 }
 .photo-removal-notice {
