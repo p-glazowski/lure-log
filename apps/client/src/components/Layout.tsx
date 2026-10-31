@@ -68,7 +68,7 @@ export default function Layout() {
               aria-controls="workspace-navigation"
               onClick={() => setOpen(true)}
             >
-              <Menu size={21} />
+              <Menu size={24} />
             </button>
             <div className="breadcrumb">
               <Link to="/dashboard">{t('Your fishing log')}</Link>

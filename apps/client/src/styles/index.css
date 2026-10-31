@@ -2596,6 +2596,10 @@ button.picker-option:hover {
   .mobile-menu {
     display: inline-flex;
   }
+  .mobile-menu > svg {
+    /* Align the strokes with the wordmark's visible lettering. */
+    transform: translateY(2px);
+  }
   .mobile-wordmark {
     display: inline-flex;
     align-items: center;
